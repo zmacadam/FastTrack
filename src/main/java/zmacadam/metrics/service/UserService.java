@@ -27,12 +27,12 @@ public class UserService {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
-    public User findUserByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public User findUserByUserName(String username) {
+        return userRepository.findByUserName(username);
     }
 
-    public User findUserByPhonenumber(String phoneNumber) {
-        return userRepository.findByPhonenumber(phoneNumber);
+    public User findUserByPhoneNumber(String phoneNumber) {
+        return userRepository.findByPhoneNumber(phoneNumber);
     }
 
     public User saveUser(User user) {

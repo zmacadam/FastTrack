@@ -42,9 +42,9 @@ public class UserServiceTest {
 
         Mockito.when(mockUserRepository.save(any()))
                 .thenReturn(user);
-        Mockito.when(mockUserRepository.findByUsername(anyString()))
+        Mockito.when(mockUserRepository.findByUserName(anyString()))
                 .thenReturn(user);
-        Mockito.when(mockUserRepository.findByPhonenumber(anyString()))
+        Mockito.when(mockUserRepository.findByPhoneNumber(anyString()))
                 .thenReturn(user);
     }
 
@@ -54,7 +54,7 @@ public class UserServiceTest {
         final String username = "zmacadam";
 
         // Run the test
-        final User result = userServiceUnderTest.findUserByUsername(username);
+        final User result = userServiceUnderTest.findUserByUserName(username);
 
         // Verify the results
         assertEquals(username, result.getUserName());
@@ -66,7 +66,7 @@ public class UserServiceTest {
         final String phonenumber = "1111111111";
 
         // Run the test
-        final User result = userServiceUnderTest.findUserByPhonenumber(phonenumber);
+        final User result = userServiceUnderTest.findUserByPhoneNumber(phonenumber);
 
         // Verify the results
         assertEquals(phonenumber, result.getPhoneNumber());

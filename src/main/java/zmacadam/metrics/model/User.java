@@ -16,18 +16,23 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "user", schema = "metrics")
+@Table(name = "user")
 public class User {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "user_id")
+    private int id;
+    @Column(name = "phone_number")
+    @Length(min = 10, max = 10)
+    @NotEmpty(message = "Please provide a phone number")
     private String phoneNumber;
     @Column(name = "user_name")
     @Length(min = 5, message = "Your username must have at least 5 characters")
     @NotEmpty(message = "Please provide a username")
     private String userName;
     @Column(name = "password")
-    @Length(min = 5, message = "Your username must have at least 5 characters")
+    @Length(min = 5, message = "Your password must have at least 5 characters")
     @NotEmpty(message = "Please provide a password")
     private String password;
     @Column(name = "first_name")
@@ -38,13 +43,13 @@ public class User {
     private String last;
     @Column(name = "age")
     @NotEmpty(message = "Please provide your age")
-    private int age;
+    private String age;
     @Column(name = "gender")
     @NotEmpty(message = "Please provide your gender")
     private String gender;
     @Column(name = "weight")
     @NotEmpty(message = "Please provide your weight")
-    private int weight;
+    private String weight;
     @Column(name = "active")
     private Boolean active;
     @ManyToMany(cascade = CascadeType.MERGE)
