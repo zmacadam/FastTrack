@@ -6,7 +6,7 @@ import zmacadam.metrics.model.User;
 
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, Integer> {
 
     User findByUserName(String userName);
     User findByPhoneNumber(String phoneNumber);

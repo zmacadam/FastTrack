@@ -1,8 +1,8 @@
 package zmacadam.metrics.nutrition;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import zmacadam.metrics.model.Food;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -3,6 +3,7 @@ package zmacadam.metrics.nutrition;
 import com.google.gson.Gson;
 import org.junit.Test;
 import org.springframework.stereotype.Component;
+import zmacadam.metrics.model.Food;
 
 import java.io.IOException;
 import java.net.http.HttpClient;
