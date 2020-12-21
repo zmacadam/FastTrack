@@ -6,7 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -18,17 +19,19 @@ import java.util.List;
 public class Day {
 
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "day_id")
     private int id;
 
     @Column(name = "date")
-    private Timestamp date;
+    private Date date;
 
-    @OneToMany(mappedBy = "day")
-    private List<Meal> meals;
+    @OneToMany(mappedBy = "day", cascade = CascadeType.PERSIST)
+    private List<Meal> meals = new ArrayList<>();
 
     public void addMeal(Meal meal) {
-        this.meals
+        this.meals.add(meal);
+        meal.setDay(this);
     }
 
 }

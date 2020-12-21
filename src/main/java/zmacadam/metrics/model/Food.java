@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.sql.Date;
 
 
 @Data
@@ -16,27 +16,11 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @Entity
 @Table(name = "food_item")
-@SecondaryTable(name="food_desc", pkJoinColumns ={@PrimaryKeyJoinColumn(name = "food_id"),
-        @PrimaryKeyJoinColumn(name = "meal_id")})
 public class Food {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "food_id")
     private int id;
-    @Column(name = "meal_id")
-    private int mealId;
-    @SerializedName(value = "food_name")
-    @Column(name = "food_name", table = "food_desc")
-    private String foodName;
-    @SerializedName(value = "brand_name")
-    @Column(name = "brand_name", table = "food_desc")
-    private String brandName;
-    @SerializedName(value = "serving_qty")
-    @Column(name = "serving_qty", table = "food_desc")
-    private String servingQty;
-    @SerializedName(value = "serving_unit")
-    @Column(name = "serving_unit", table = "food_desc")
-    private String servingUnit;
     @SerializedName(value = "nf_calories")
     @Column(name = "calories")
     private String Calories;
@@ -70,8 +54,9 @@ public class Food {
     @JoinColumn(name ="meal_id", nullable = false)
     private Meal meal;
 
+
     @Override public String toString() {
-        return foodName + " , " + brandName + " , " + servingQty + " , " + servingUnit + " , " + Calories + " , " + TotalFat + " , " + SaturatedFat + " , "
+        return Calories + " , " + TotalFat + " , " + SaturatedFat + " , "
                 + Cholesterol+ " , " + Sodium + " , " + totalCarbohydrate + " , " + dietaryFiber+ " , " + sugars + " , " + protein + " , " + unit;
     }
 }

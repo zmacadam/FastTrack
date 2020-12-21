@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import zmacadam.metrics.model.Food;
+import zmacadam.metrics.model.FoodDescription;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -13,16 +14,20 @@ public class FoodWrapper {
 
     private Object[] foods;
     private Food food;
+    private FoodDescription foodDescription;
 
     public Food getFood() {
         return food;
     }
 
+    public FoodDescription getFoodDescription() { return foodDescription; }
+
     public void createFood() {
-        JsonObject obj = new Gson().toJsonTree(foods[0]).getAsJsonObject();
-        divideByQty(obj);
-        System.out.println(obj.toString());
-        food = new Gson().fromJson(obj, Food.class);
+        JsonObject foodObj = new Gson().toJsonTree(foods[0]).getAsJsonObject();
+        divideByQty(foodObj);
+        JsonObject descObj = createFoodDescription(foodObj);
+        food = new Gson().fromJson(foodObj, Food.class);
+        foodDescription = new Gson().fromJson(descObj, FoodDescription.class);
     }
 
     public void divideByQty(JsonObject obj) {
@@ -37,6 +42,24 @@ public class FoodWrapper {
             }
         }
     }
+
+    public JsonObject createFoodDescription(JsonObject obj) {
+        String foodName = obj.remove("food_name").getAsString();
+        String brandName = obj.get("brand_name") == null ? "null" : obj.get("brand_name").getAsString();
+        obj.remove("brand_name");
+        double servingQty = obj.remove("serving_qty").getAsDouble();
+        String servingUnit = obj.remove("serving_unit").getAsString();
+        System.out.println(foodName + ", " + brandName + ", " + servingQty + ", " + servingUnit);
+
+        JsonObject foodDesc = new JsonObject();
+        foodDesc.addProperty("food_name", foodName);
+        foodDesc.addProperty("brand_name", brandName);
+        foodDesc.addProperty("serving_qty", servingQty);
+        foodDesc.addProperty("serving_unit", servingUnit);
+
+        return foodDesc;
+    }
+
     @Override public String toString() {
         String result = "";
         for (Object obj : foods) {
