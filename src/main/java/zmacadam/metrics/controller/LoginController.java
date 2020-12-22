@@ -64,7 +64,7 @@ public class LoginController {
         User user = userService.findUserByUserName(auth.getName());
         modelAndView.addObject("userName", "Welcome " + user.getUserName() + "/" + user.getFirst() + " " + user.getLast() + " (" + user.getPhoneNumber() + ")");
         modelAndView.addObject("adminMessage","Content Available Only for Users with Admin Role");
-        modelAndView.setViewName("admin/home");
+        modelAndView.setViewName("user/home");
         return modelAndView;
     }
 }

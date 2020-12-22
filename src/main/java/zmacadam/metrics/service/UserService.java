@@ -3,8 +3,8 @@ package zmacadam.metrics.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import zmacadam.metrics.dao.RoleRepository;
-import zmacadam.metrics.dao.UserRepository;
+import zmacadam.metrics.repository.RoleRepository;
+import zmacadam.metrics.repository.UserRepository;
 import zmacadam.metrics.model.Role;
 import zmacadam.metrics.model.User;
 
@@ -39,7 +39,7 @@ public class UserService {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setActive(true);
         Role userRole = roleRepository.findByRole("ADMIN");
-        user.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
+        user.setRoles(new HashSet<>(Arrays.asList(userRole)));
         return userRepository.save(user);
     }
 }

@@ -32,7 +32,7 @@ public class FoodDescription {
     @SerializedName(value = "serving_unit")
     @Column(name = "serving_unit")
     private String servingUnit;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name ="meal_id", nullable = false)
     private Meal meal;
 

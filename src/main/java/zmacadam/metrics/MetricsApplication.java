@@ -19,21 +19,4 @@ public class MetricsApplication {
     public static void main(String[] args) {
         SpringApplication.run(MetricsApplication.class, args);
     }
-    @Bean
-    public CommandLineRunner demo(DayDetailsService dayDetailsService) {
-        return (args) -> {
-            Day day = new Day();
-            Meal meal = new Meal();
-            Food food = new Food();
-            FoodDescription foodDescription = new FoodDescription();
-            foodDescription.setId(food.getId());
-
-            day.addMeal(meal);
-
-            meal.addFoodDescription(foodDescription);
-            meal.addFood(food);
-
-            dayDetailsService.saveDay(day);
-        };
-    }
 }

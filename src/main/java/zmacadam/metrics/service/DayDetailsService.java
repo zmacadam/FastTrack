@@ -2,12 +2,13 @@ package zmacadam.metrics.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import zmacadam.metrics.dao.DayRepository;
-import zmacadam.metrics.dao.MealRepository;
+import zmacadam.metrics.repository.DayRepository;
+import zmacadam.metrics.repository.MealRepository;
 import zmacadam.metrics.model.Day;
 import zmacadam.metrics.model.Meal;
 
 import java.sql.Date;
+import java.util.List;
 
 @Service
 public class DayDetailsService {
@@ -22,8 +23,8 @@ public class DayDetailsService {
         this.mealRepository = mealRepository;
     }
 
-    public Day findByDate(Date day) {
-        return dayRepository.findByDate(day);
+    public List<Day> findByDateAndPhoneNumber(Date date, String phoneNumber) {
+        return dayRepository.findByDateAndPhoneNumber(date, phoneNumber);
     }
 
     public Meal findByMealId(int mealId) {

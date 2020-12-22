@@ -50,7 +50,7 @@ public class Food {
     private String protein;
     @Column(name = "unit")
     private String unit;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name ="meal_id", nullable = false)
     private Meal meal;
 

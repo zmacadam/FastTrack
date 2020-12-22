@@ -1,13 +1,8 @@
-package zmacadam.metrics.nutrition;
+package zmacadam.metrics.model;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import zmacadam.metrics.model.Food;
-import zmacadam.metrics.model.FoodDescription;
-
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Set;
 
 public class FoodWrapper {

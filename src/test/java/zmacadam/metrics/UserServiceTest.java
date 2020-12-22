@@ -1,14 +1,14 @@
-package zmacadam.metrics.service;
+package zmacadam.metrics;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import zmacadam.metrics.dao.RoleRepository;
-import zmacadam.metrics.dao.UserRepository;
+import zmacadam.metrics.repository.RoleRepository;
+import zmacadam.metrics.repository.UserRepository;
 import zmacadam.metrics.model.User;
+import zmacadam.metrics.service.UserService;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;

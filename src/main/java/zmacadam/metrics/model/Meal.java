@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.lang.reflect.Array;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,14 +28,17 @@ public class Meal {
     @Column(name = "meal_number")
     private int mealNumber;
 
-    @OneToMany(mappedBy = "meal", cascade = CascadeType.PERSIST)
+    @Column(name = "meal_time")
+    private Time time;
+
+    @OneToMany(mappedBy = "meal", cascade = CascadeType.ALL)
     private List<Food> foods = new ArrayList<>();
 
-    @OneToMany(mappedBy = "meal", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "meal", cascade = CascadeType.ALL)
     private List<FoodDescription> descriptions = new ArrayList<>();
 
-    @ManyToOne
-    @JoinColumn(name = "day_id", nullable = false)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "day_id")
     private Day day;
 
     public void addFood(Food food) {

@@ -1,4 +1,4 @@
-package zmacadam.metrics.nutrition;
+package zmacadam.metrics.model;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
