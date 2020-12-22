@@ -1,4 +1,4 @@
-package zmacadam.metrics.model;
+package zmacadam.metrics.model.nutrition;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
@@ -7,7 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Data
@@ -48,15 +49,21 @@ public class Food {
     @SerializedName(value = "nf_protein")
     @Column(name = "protein")
     private String protein;
-    @Column(name = "unit")
-    private String unit;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name ="meal_id", nullable = false)
     private Meal meal;
 
+    @OneToMany(mappedBy = "food", cascade = CascadeType.ALL)
+    private List<FoodDescription> foodDescription = new ArrayList<>();
+
+    public void addFoodDescription(FoodDescription foodDescription) {
+        this.foodDescription.add(foodDescription);
+        foodDescription.setFood(this);
+    }
+
 
     @Override public String toString() {
         return Calories + " , " + TotalFat + " , " + SaturatedFat + " , "
-                + Cholesterol+ " , " + Sodium + " , " + totalCarbohydrate + " , " + dietaryFiber+ " , " + sugars + " , " + protein + " , " + unit;
+                + Cholesterol+ " , " + Sodium + " , " + totalCarbohydrate + " , " + dietaryFiber+ " , " + sugars + " , " + protein;
     }
 }

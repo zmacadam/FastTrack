@@ -8,8 +8,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import org.springframework.stereotype.Service;
-import zmacadam.metrics.model.Role;
-import zmacadam.metrics.model.User;
+import zmacadam.metrics.model.user.Role;
+import zmacadam.metrics.model.user.User;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;

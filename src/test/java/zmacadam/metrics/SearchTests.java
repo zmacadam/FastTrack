@@ -3,9 +3,9 @@ package zmacadam.metrics;
 import com.google.gson.Gson;
 import org.junit.Test;
 import org.springframework.stereotype.Component;
-import zmacadam.metrics.model.Food;
-import zmacadam.metrics.model.FoodWrapper;
-import zmacadam.metrics.model.InstantFoodWrapper;
+import zmacadam.metrics.model.nutrition.Food;
+import zmacadam.metrics.model.nutrition.FoodWrapper;
+import zmacadam.metrics.model.nutrition.InstantFoodWrapper;
 import zmacadam.metrics.util.search.SearchBuilder;
 
 import java.io.IOException;

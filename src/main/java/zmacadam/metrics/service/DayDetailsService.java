@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import zmacadam.metrics.repository.DayRepository;
 import zmacadam.metrics.repository.MealRepository;
 import zmacadam.metrics.model.Day;
-import zmacadam.metrics.model.Meal;
+import zmacadam.metrics.model.nutrition.Meal;
 
 import java.sql.Date;
 import java.util.List;

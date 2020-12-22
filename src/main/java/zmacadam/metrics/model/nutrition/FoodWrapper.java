@@ -1,4 +1,4 @@
-package zmacadam.metrics.model;
+package zmacadam.metrics.model.nutrition;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -26,14 +26,17 @@ public class FoodWrapper {
     }
 
     public void divideByQty(JsonObject obj) {
-        double divisor = obj.get("serving_qty").getAsDouble();
-        obj.addProperty("unit", obj.get("serving_unit").getAsString());
+        double grams = obj.get("serving_weight_grams").getAsDouble();
+        double gram = 28.35;
+        double ounces = grams/gram;
+        obj.addProperty("serving_qty", ounces);
+        obj.addProperty("serving_unit", "ounce");
         Set<String> keys = obj.keySet();
         for (Iterator<String> it = keys.iterator(); it.hasNext(); ) {
             String cur = it.next();
             if (cur.startsWith("nf")) {
                 double val = obj.get(cur).getAsDouble();
-                obj.addProperty(cur, val/divisor);
+                obj.addProperty(cur, val/ounces);
             }
         }
     }

@@ -1,13 +1,15 @@
-package zmacadam.metrics.model;
+package zmacadam.metrics.model.nutrition;
 
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import zmacadam.metrics.model.Day;
+import zmacadam.metrics.model.nutrition.Food;
+import zmacadam.metrics.model.nutrition.FoodDescription;
 
 import javax.persistence.*;
-import java.lang.reflect.Array;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,9 +36,6 @@ public class Meal {
     @OneToMany(mappedBy = "meal", cascade = CascadeType.ALL)
     private List<Food> foods = new ArrayList<>();
 
-    @OneToMany(mappedBy = "meal", cascade = CascadeType.ALL)
-    private List<FoodDescription> descriptions = new ArrayList<>();
-
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "day_id")
     private Day day;
@@ -44,10 +43,5 @@ public class Meal {
     public void addFood(Food food) {
         this.foods.add(food);
         food.setMeal(this);
-    }
-
-    public void addFoodDescription(FoodDescription foodDescription) {
-        this.descriptions.add(foodDescription);
-        foodDescription.setMeal(this);
     }
 }

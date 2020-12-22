@@ -3,8 +3,8 @@ package zmacadam.metrics.util.search;
 import com.google.gson.Gson;
 import net.minidev.json.JSONObject;
 import org.springframework.stereotype.Component;
-import zmacadam.metrics.model.FoodWrapper;
-import zmacadam.metrics.model.InstantFoodWrapper;
+import zmacadam.metrics.model.nutrition.FoodWrapper;
+import zmacadam.metrics.model.nutrition.InstantFoodWrapper;
 
 import java.io.IOException;
 import java.net.URI;

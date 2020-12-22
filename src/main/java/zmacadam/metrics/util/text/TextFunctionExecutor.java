@@ -1,7 +1,7 @@
 package zmacadam.metrics.util.text;
 
 import zmacadam.metrics.model.Day;
-import zmacadam.metrics.model.User;
+import zmacadam.metrics.model.user.User;
 
 import java.util.List;
 

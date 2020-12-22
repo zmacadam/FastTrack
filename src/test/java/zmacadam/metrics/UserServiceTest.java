@@ -7,7 +7,7 @@ import org.mockito.Mockito;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import zmacadam.metrics.repository.RoleRepository;
 import zmacadam.metrics.repository.UserRepository;
-import zmacadam.metrics.model.User;
+import zmacadam.metrics.model.user.User;
 import zmacadam.metrics.service.UserService;
 
 import static org.junit.Assert.assertEquals;

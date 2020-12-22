@@ -3,14 +3,17 @@ package zmacadam.metrics.util.text;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.minidev.json.JSONObject;
-import net.minidev.json.parser.JSONParser;
-import net.minidev.json.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import zmacadam.metrics.controller.SMSController;
 import zmacadam.metrics.model.*;
+import zmacadam.metrics.model.nutrition.Food;
+import zmacadam.metrics.model.nutrition.FoodDescription;
+import zmacadam.metrics.model.nutrition.FoodWrapper;
+import zmacadam.metrics.model.nutrition.Meal;
+import zmacadam.metrics.model.user.User;
 import zmacadam.metrics.service.DayDetailsService;
 import zmacadam.metrics.util.search.SearchBuilder;
 
@@ -51,8 +54,9 @@ public class MealFunctionImpl extends AbstractFunctionExecutor {
                 if (foodAndDescription == null) {
                     return "No foods found for entry: " + line;
                 }
-                meal.addFood((Food) foodAndDescription[0]);
-                meal.addFoodDescription((FoodDescription) foodAndDescription[1]);
+                Food food = (Food) foodAndDescription[0];
+                food.addFoodDescription((FoodDescription) foodAndDescription[1]);
+                meal.addFood(food);
             } catch (InterruptedException | IOException e) {
                 e.printStackTrace();
             }

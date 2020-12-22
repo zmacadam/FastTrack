@@ -1,4 +1,4 @@
-package zmacadam.metrics.model;
+package zmacadam.metrics.model.nutrition;
 
 
 import com.google.gson.annotations.SerializedName;
@@ -18,7 +18,7 @@ import javax.persistence.*;
 public class FoodDescription {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column(name = "food_id")
+    @Column(name = "description_id")
     private int id;
     @SerializedName(value = "food_name")
     @Column(name = "food_name")
@@ -32,9 +32,10 @@ public class FoodDescription {
     @SerializedName(value = "serving_unit")
     @Column(name = "serving_unit")
     private String servingUnit;
+
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name ="meal_id", nullable = false)
-    private Meal meal;
+    @JoinColumn(name = "description_id", nullable = false)
+    private Food food;
 
     @Override
     public String toString() {

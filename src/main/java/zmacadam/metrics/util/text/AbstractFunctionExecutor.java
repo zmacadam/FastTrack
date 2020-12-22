@@ -1,9 +1,7 @@
 package zmacadam.metrics.util.text;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import zmacadam.metrics.model.Day;
-import zmacadam.metrics.model.User;
+import zmacadam.metrics.model.user.User;
 import zmacadam.metrics.service.DayDetailsService;
 
 import java.sql.Date;

@@ -6,10 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import zmacadam.metrics.controller.SMSController;
 import zmacadam.metrics.model.Day;
-import zmacadam.metrics.model.User;
+import zmacadam.metrics.model.user.User;
 import zmacadam.metrics.service.DayDetailsService;
 
-import java.sql.Date;
 import java.sql.Time;
 import java.util.List;
 

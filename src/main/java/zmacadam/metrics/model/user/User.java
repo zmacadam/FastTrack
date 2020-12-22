@@ -1,4 +1,4 @@
-package zmacadam.metrics.model;
+package zmacadam.metrics.model.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,7 +1,7 @@
 package zmacadam.metrics.util.text;
 
 import org.springframework.stereotype.Component;
-import zmacadam.metrics.model.User;
+import zmacadam.metrics.model.user.User;
 
 import java.util.HashMap;
 

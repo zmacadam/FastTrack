@@ -5,8 +5,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import zmacadam.metrics.repository.RoleRepository;
 import zmacadam.metrics.repository.UserRepository;
-import zmacadam.metrics.model.Role;
-import zmacadam.metrics.model.User;
+import zmacadam.metrics.model.user.Role;
+import zmacadam.metrics.model.user.User;
 
 import java.util.Arrays;
 import java.util.HashSet;
