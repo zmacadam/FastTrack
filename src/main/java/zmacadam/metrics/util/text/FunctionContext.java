@@ -21,6 +21,8 @@ public class FunctionContext {
 
     public String call(String name, String identifier, String[] body, User user) { return context.get(name).execute(identifier, body, user); }
 
+    public String call(String name, String type, String identifier, String[] body, User user) { return context.get(name).execute(type, identifier, body, user); }
+
     public TextFunctionExecutor get (String name) {
         return context.get(name);
     }

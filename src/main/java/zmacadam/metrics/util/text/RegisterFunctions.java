@@ -24,6 +24,8 @@ public class RegisterFunctions {
         functionContext.register("meal", new MealFunctionImpl(dayDetailsService, searchBuilder));
         functionContext.register("awake", new AwakeFunctionImpl(dayDetailsService));
         functionContext.register("sleep", new SleepFunctionImpl(dayDetailsService));
+        functionContext.register("workout", new WorkoutFunctionImpl(dayDetailsService));
+        functionContext.register("activity", new ActivityFunctionImpl(dayDetailsService));
     }
 
     public FunctionContext getFunctionContext() {

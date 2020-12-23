@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import zmacadam.metrics.controller.SMSController;
 import zmacadam.metrics.model.*;
 import zmacadam.metrics.model.nutrition.Food;
 import zmacadam.metrics.model.nutrition.FoodDescription;
@@ -18,6 +17,7 @@ import zmacadam.metrics.service.DayDetailsService;
 import zmacadam.metrics.util.search.SearchBuilder;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.sql.Time;
 import java.util.List;
 
@@ -27,7 +27,7 @@ public class MealFunctionImpl extends AbstractFunctionExecutor {
     private final DayDetailsService dayDetailsService;
     private final SearchBuilder searchBuilder;
 
-    private static Logger logger = LoggerFactory.getLogger(SMSController.class);
+    private static Logger logger = LoggerFactory.getLogger(MealFunctionImpl.class);
 
     @Autowired
     public MealFunctionImpl(DayDetailsService dayDetailsService,
@@ -40,8 +40,7 @@ public class MealFunctionImpl extends AbstractFunctionExecutor {
     @Override
     public String execute(String identifier, String[] body, User user) {
         logger.info("Meal execute");
-        List<Day> result = findDayByUser(user);
-        Day day = result.get(0);
+        Day day = retrieveDay(user);
 
         Meal meal = new Meal();
         meal.setDay(day);
@@ -75,11 +74,11 @@ public class MealFunctionImpl extends AbstractFunctionExecutor {
         obj.put("query", line);
         String result = searchBuilder.search(searchBuilder.createPOSTRequest(url, obj));
         JsonObject jsonObject = JsonParser.parseString(result).getAsJsonObject();
-        if (jsonObject.get("result").getAsString().equals("We couldn't match any of your foods")) {
+        if (jsonObject.has("message")) {
             return null;
         }
         FoodWrapper foodWrapper = (FoodWrapper) searchBuilder.jsonToFood(result, 1);
-        foodWrapper.createFood();
+        foodWrapper.createFood(line);
         foodAndDescription[0] = foodWrapper.getFood();
         foodAndDescription[1] = foodWrapper.getFoodDescription();
         return foodAndDescription;

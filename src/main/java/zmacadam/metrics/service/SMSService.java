@@ -2,18 +2,23 @@ package zmacadam.metrics.service;
 
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import zmacadam.metrics.model.user.User;
 import zmacadam.metrics.repository.UserRepository;
 import zmacadam.metrics.util.text.FunctionContext;
 import zmacadam.metrics.util.text.RegisterFunctions;
+import zmacadam.metrics.util.text.WorkoutFunctionImpl;
 
 @Service
 public class SMSService {
 
     private UserRepository userRepository;
     private FunctionContext functionContext;
+    private static Logger logger = LoggerFactory.getLogger(SMSService.class);
+
 
     @Autowired
     public SMSService(UserRepository userRepository,
@@ -34,6 +39,12 @@ public class SMSService {
         }
         String[] commandRemoved = ArrayUtils.remove(lines, 0);
         if (command.length > 1) {
+            if (command[0].equals("begin") || command[0].equals("end")) {
+                if (command[1].equals("workout")) {
+                    return functionContext.call(command[1], command[0], commandRemoved, user);
+                }
+                return functionContext.call("activity", command[1], command[0], commandRemoved, user);
+            }
             return functionContext.call(command[0], command[1], commandRemoved, user);
         } else {
             return functionContext.call(command[0], commandRemoved, user);

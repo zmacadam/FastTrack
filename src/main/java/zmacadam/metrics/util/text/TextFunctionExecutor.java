@@ -9,6 +9,7 @@ public interface TextFunctionExecutor {
      String execute(String[] body);
      String execute(String[] body, User user);
      String execute(String identifier, String[] body, User user);
+     String execute(String type, String identifier, String[] body, User user);
      List<Day> findDayByUser(User user);
      Day saveDay(Day day);
 }

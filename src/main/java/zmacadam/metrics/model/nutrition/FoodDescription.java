@@ -32,9 +32,12 @@ public class FoodDescription {
     @SerializedName(value = "serving_unit")
     @Column(name = "serving_unit")
     private String servingUnit;
+    @SerializedName(value = "search_query")
+    @Column(name = "search_query")
+    private String searchQuery;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "description_id", nullable = false)
+    @JoinColumn(name = "food_id", nullable = false)
     private Food food;
 
     @Override
