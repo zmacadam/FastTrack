@@ -10,6 +10,7 @@ import zmacadam.metrics.model.user.User;
 import zmacadam.metrics.model.workout.Exercise;
 import zmacadam.metrics.model.workout.ExerciseDescription;
 import zmacadam.metrics.model.workout.Workout;
+import zmacadam.metrics.repository.ExerciseRepository;
 import zmacadam.metrics.service.DayDetailsService;
 
 import java.util.List;
@@ -18,13 +19,16 @@ import java.util.List;
 public class ExerciseFunctionImpl extends AbstractFunctionExecutor {
 
     private final DayDetailsService dayDetailsService;
+    private final ExerciseRepository exerciseRepository;
 
     private static Logger logger = LoggerFactory.getLogger(ExerciseFunctionImpl.class);
 
     @Autowired
-    public ExerciseFunctionImpl(DayDetailsService dayDetailsService) {
+    public ExerciseFunctionImpl(DayDetailsService dayDetailsService,
+                                ExerciseRepository exerciseRepository) {
         super(dayDetailsService);
         this.dayDetailsService = dayDetailsService;
+        this.exerciseRepository = exerciseRepository;
     }
 
     @Override
@@ -58,12 +62,15 @@ public class ExerciseFunctionImpl extends AbstractFunctionExecutor {
             String[] exerciseValues = line.split(" ");
             int valuesLength = exerciseValues.length;
             String exerciseName = String.join(" ", ArrayUtils.removeAll(exerciseValues, valuesLength -1, valuesLength -2));
-            Exercise exercise = new Exercise();
+            Exercise exercise = exerciseRepository.findByExerciseName(exerciseName);
+            if (exercise == null) {
+                exercise = new Exercise();
+                exercise.setExerciseName(exerciseName);
+            }
             ExerciseDescription exerciseDescription = new ExerciseDescription();
             exerciseDescription.setSets(Integer.parseInt(exerciseValues[valuesLength - 2]));
             exerciseDescription.setReps(Integer.parseInt(exerciseValues[valuesLength - 1]));
             exerciseDescription.setExerciseNumber(Integer.parseInt(identifier));
-            exercise.setExerciseName(exerciseName);
             exerciseDescription.addExercise(exercise);
             workout.addExerciseDescription(exerciseDescription);
             return;

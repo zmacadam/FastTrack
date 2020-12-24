@@ -1,5 +1,6 @@
 package zmacadam.metrics.util.text;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.minidev.json.JSONObject;
@@ -13,6 +14,8 @@ import zmacadam.metrics.model.nutrition.FoodDescription;
 import zmacadam.metrics.model.nutrition.FoodWrapper;
 import zmacadam.metrics.model.nutrition.Meal;
 import zmacadam.metrics.model.user.User;
+import zmacadam.metrics.repository.FoodRepository;
+import zmacadam.metrics.repository.MealRepository;
 import zmacadam.metrics.service.DayDetailsService;
 import zmacadam.metrics.util.search.SearchBuilder;
 
@@ -26,26 +29,36 @@ public class MealFunctionImpl extends AbstractFunctionExecutor {
 
     private final DayDetailsService dayDetailsService;
     private final SearchBuilder searchBuilder;
+    private final FoodRepository foodRepository;
+    private final MealRepository mealRepository;
 
     private static Logger logger = LoggerFactory.getLogger(MealFunctionImpl.class);
 
     @Autowired
     public MealFunctionImpl(DayDetailsService dayDetailsService,
-                            SearchBuilder searchBuilder) {
+                            SearchBuilder searchBuilder,
+                            FoodRepository foodRepository,
+                            MealRepository mealRepository) {
         super(dayDetailsService);
         this.dayDetailsService = dayDetailsService;
         this.searchBuilder = searchBuilder;
+        this.foodRepository = foodRepository;
+        this.mealRepository = mealRepository;
     }
 
     @Override
     public String execute(String identifier, String[] body, User user) {
         logger.info("Meal execute");
+
         Day day = retrieveDay(user);
 
-        Meal meal = new Meal();
-        meal.setDay(day);
-        meal.setMealNumber(Integer.parseInt(identifier));
-        meal.setTime(new Time(System.currentTimeMillis()));
+        Meal meal = mealRepository.findByMealNumber(Integer.parseInt(identifier));
+        if (meal == null) {
+            meal = new Meal();
+            meal.setDay(day);
+            meal.setMealNumber(Integer.parseInt(identifier));
+            meal.setTime(new Time(System.currentTimeMillis()));
+        }
 
         for (String line : body) {
             try {
@@ -77,10 +90,25 @@ public class MealFunctionImpl extends AbstractFunctionExecutor {
         if (jsonObject.has("message")) {
             return null;
         }
-        FoodWrapper foodWrapper = (FoodWrapper) searchBuilder.jsonToFood(result, 1);
-        foodWrapper.createFood(line);
-        foodAndDescription[0] = foodWrapper.getFood();
-        foodAndDescription[1] = foodWrapper.getFoodDescription();
+        logger.info(result);
+        JsonArray foodsArray = jsonObject.getAsJsonArray("foods");
+        JsonObject foodsObject = (JsonObject) foodsArray.get(0);
+        String foodName = foodsObject.get("food_name").toString();
+        Food food = foodRepository.findByFoodName(foodName.replace("\"", ""));
+        if (food == null) {
+            logger.info("food was null");
+            FoodWrapper foodWrapper = (FoodWrapper) searchBuilder.jsonToFood(result, 1);
+            foodWrapper.createFood(line);
+            foodAndDescription[0] = foodWrapper.getFood();
+            foodAndDescription[1] = foodWrapper.getFoodDescription();
+            return foodAndDescription;
+        }
+        foodAndDescription[0] = food;
+        FoodDescription foodDescription = new FoodDescription();
+        foodDescription.setSearchQuery(line);
+        foodDescription.setServingQty(foodsObject.get("serving_qty").toString());
+        foodDescription.setServingUnit("ounce");
+        foodAndDescription[1] = foodDescription;
         return foodAndDescription;
     }
 

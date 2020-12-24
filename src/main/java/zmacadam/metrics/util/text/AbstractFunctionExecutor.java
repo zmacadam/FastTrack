@@ -37,6 +37,7 @@ public abstract class AbstractFunctionExecutor implements TextFunctionExecutor {
     public Day retrieveDay(User user) {
         List<Day> result = findDayByUser(user);
         Day day;
+        logger.info(String.valueOf(result.size()));
         if (result.size() == 0) {
             day = new Day();
             day.setDate(new Date(System.currentTimeMillis()));
