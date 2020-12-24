@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Builder
@@ -20,12 +22,6 @@ public class FoodDescription {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "description_id")
     private int id;
-    @SerializedName(value = "food_name")
-    @Column(name = "food_name")
-    private String foodName;
-    @SerializedName(value = "brand_name")
-    @Column(name = "brand_name")
-    private String brandName;
     @SerializedName(value = "serving_qty")
     @Column(name = "serving_qty")
     private String servingQty;
@@ -37,11 +33,19 @@ public class FoodDescription {
     private String searchQuery;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "food_id", nullable = false)
-    private Food food;
+    @JoinColumn(name ="meal_id", nullable = false)
+    private Meal meal;
+
+    @OneToMany(mappedBy = "foodDescription", cascade = CascadeType.ALL)
+    private List<Food> foods = new ArrayList<>();
+
+    public void addFood(Food food) {
+        this.foods.add(food);
+        food.setFoodDescription(this);
+    }
 
     @Override
     public String toString() {
-        return foodName + " , " + brandName + " , " + servingQty + " , " + servingUnit;
+        return servingQty + " , " + servingUnit;
     }
 }

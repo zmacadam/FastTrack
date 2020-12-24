@@ -29,8 +29,7 @@ public class WorkoutFunctionImpl extends AbstractFunctionExecutor {
     public String execute(String identifier, String[] body, User user) {
         Day day = retrieveDay(user);
         if (identifier.equals("begin")) {
-            Workout workout = new Workout();
-            workout.setStartTime(new Time(System.currentTimeMillis()));
+            Workout workout = createWorkout();
             workout.setNotes(String.join("\n", body));
             day.addWorkout(workout);
             saveDay(day);

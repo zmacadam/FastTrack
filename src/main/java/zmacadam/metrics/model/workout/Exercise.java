@@ -25,15 +25,8 @@ public class Exercise {
     @Column(name = "exercise_name")
     private String exerciseName;
 
-    @OneToMany(mappedBy = "exercise", cascade = CascadeType.ALL)
-    private List<ExerciseDescription> descriptions = new ArrayList<>();
-
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name ="workout_id", nullable = false)
-    private Workout workout;
+    @JoinColumn(name ="exercise_description_id", nullable = false)
+    private ExerciseDescription exerciseDescription;
 
-    public void addExerciseDescription(ExerciseDescription exerciseDescription) {
-        this.descriptions.add(exerciseDescription);
-        exerciseDescription.setExercise(this);
-    }
 }

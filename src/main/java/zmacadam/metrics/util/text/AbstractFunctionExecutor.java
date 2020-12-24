@@ -4,9 +4,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import zmacadam.metrics.model.Day;
 import zmacadam.metrics.model.user.User;
+import zmacadam.metrics.model.workout.Workout;
 import zmacadam.metrics.service.DayDetailsService;
 
 import java.sql.Date;
+import java.sql.Time;
 import java.util.List;
 
 public abstract class AbstractFunctionExecutor implements TextFunctionExecutor {
@@ -44,5 +46,11 @@ public abstract class AbstractFunctionExecutor implements TextFunctionExecutor {
             day = result.get(0);
         }
         return day;
+    }
+
+    public Workout createWorkout() {
+        Workout workout = new Workout();
+        workout.setStartTime(new Time(System.currentTimeMillis()));
+        return workout;
     }
 }

@@ -37,15 +37,15 @@ public class Workout {
     private String notes;
 
     @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL)
-    private List<Exercise> exercises = new ArrayList<>();
+    private List<ExerciseDescription> exerciseDescriptions = new ArrayList<>();
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "day_id")
     private Day day;
 
-    public void addExercise(Exercise exercise) {
-        this.exercises.add(exercise);
-        exercise.setWorkout(this);
+    public void addExerciseDescription(ExerciseDescription exerciseDescription) {
+        this.exerciseDescriptions.add(exerciseDescription);
+        exerciseDescription.setWorkout(this);
     }
 
 }

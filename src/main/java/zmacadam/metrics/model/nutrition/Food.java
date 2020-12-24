@@ -22,6 +22,12 @@ public class Food {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "food_id")
     private int id;
+    @SerializedName(value = "food_name")
+    @Column(name = "food_name")
+    private String foodName;
+    @SerializedName(value = "brand_name")
+    @Column(name = "brand_name")
+    private String brandName;
     @SerializedName(value = "nf_calories")
     @Column(name = "calories")
     private String Calories;
@@ -49,18 +55,10 @@ public class Food {
     @SerializedName(value = "nf_protein")
     @Column(name = "protein")
     private String protein;
+
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name ="meal_id", nullable = false)
-    private Meal meal;
-
-    @OneToMany(mappedBy = "food", cascade = CascadeType.ALL)
-    private List<FoodDescription> foodDescription = new ArrayList<>();
-
-    public void addFoodDescription(FoodDescription foodDescription) {
-        this.foodDescription.add(foodDescription);
-        foodDescription.setFood(this);
-    }
-
+    @JoinColumn(name = "description_id", nullable = false)
+    private FoodDescription foodDescription;
 
     @Override public String toString() {
         return Calories + " , " + TotalFat + " , " + SaturatedFat + " , "

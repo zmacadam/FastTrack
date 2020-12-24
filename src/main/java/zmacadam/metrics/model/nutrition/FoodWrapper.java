@@ -52,16 +52,10 @@ public class FoodWrapper {
     }
 
     public JsonObject createFoodDescription(JsonObject obj) {
-        String foodName = obj.remove("food_name").getAsString();
-        String brandName = obj.get("brand_name") == null ? "null" : obj.get("brand_name").getAsString();
-        obj.remove("brand_name");
         double servingQty = obj.remove("serving_qty").getAsDouble();
         String servingUnit = obj.remove("serving_unit").getAsString();
-        System.out.println(foodName + ", " + brandName + ", " + servingQty + ", " + servingUnit);
 
         JsonObject foodDesc = new JsonObject();
-        foodDesc.addProperty("food_name", foodName);
-        foodDesc.addProperty("brand_name", brandName);
         foodDesc.addProperty("serving_qty", servingQty);
         foodDesc.addProperty("serving_unit", servingUnit);
 

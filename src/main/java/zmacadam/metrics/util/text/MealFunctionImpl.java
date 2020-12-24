@@ -53,9 +53,9 @@ public class MealFunctionImpl extends AbstractFunctionExecutor {
                 if (foodAndDescription == null) {
                     return "No foods found for entry: " + line;
                 }
-                Food food = (Food) foodAndDescription[0];
-                food.addFoodDescription((FoodDescription) foodAndDescription[1]);
-                meal.addFood(food);
+                FoodDescription foodDescription = (FoodDescription) foodAndDescription[1];
+                foodDescription.addFood((Food) foodAndDescription[0]);
+                meal.addFoodDescription(foodDescription);
             } catch (InterruptedException | IOException e) {
                 e.printStackTrace();
             }

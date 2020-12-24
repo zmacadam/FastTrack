@@ -34,14 +34,14 @@ public class Meal {
     private Time time;
 
     @OneToMany(mappedBy = "meal", cascade = CascadeType.ALL)
-    private List<Food> foods = new ArrayList<>();
+    private List<FoodDescription> foodDescriptions = new ArrayList<>();
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "day_id")
     private Day day;
 
-    public void addFood(Food food) {
-        this.foods.add(food);
-        food.setMeal(this);
+    public void addFoodDescription(FoodDescription foodDescription) {
+        this.foodDescriptions.add(foodDescription);
+        foodDescription.setMeal(this);
     }
 }

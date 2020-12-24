@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Builder
@@ -27,7 +29,19 @@ public class ExerciseDescription {
     @Column(name = "reps")
     private int reps;
 
+    @Column(name = "exercise_number")
+    private int exerciseNumber;
+
+    @OneToMany(mappedBy = "exerciseDescription", cascade = CascadeType.ALL)
+    private List<Exercise> exercises = new ArrayList<>();
+
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name ="exercise_id", nullable = false)
-    private Exercise exercise;
+    @JoinColumn(name ="workout_id", nullable = false)
+    private Workout workout;
+
+
+    public void addExercise(Exercise exercise) {
+        this.exercises.add(exercise);
+        exercise.setExerciseDescription(this);
+    }
 }
