@@ -42,6 +42,7 @@ public abstract class AbstractFunctionExecutor implements TextFunctionExecutor {
             day = new Day();
             day.setDate(new Date(System.currentTimeMillis()));
             day.setPhoneNumber(user.getPhoneNumber());
+            user.addDay(day);
             saveDay(day);
         } else {
             day = result.get(0);

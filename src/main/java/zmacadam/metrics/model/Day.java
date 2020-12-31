@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import zmacadam.metrics.model.activity.Activity;
 import zmacadam.metrics.model.nutrition.Meal;
+import zmacadam.metrics.model.user.User;
 import zmacadam.metrics.model.workout.Workout;
 
 import javax.persistence.*;
@@ -47,6 +48,9 @@ public class Day {
 
     @OneToMany(mappedBy = "day", cascade = CascadeType.ALL)
     private List<Activity> activities = new ArrayList<>();
+
+    @ManyToOne
+    private User user;
 
     public void addMeal(Meal meal) {
         this.meals.add(meal);

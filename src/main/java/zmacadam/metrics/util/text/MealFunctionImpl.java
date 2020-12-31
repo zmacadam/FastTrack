@@ -9,8 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import zmacadam.metrics.model.*;
-import zmacadam.metrics.model.nutrition.Food;
 import zmacadam.metrics.model.nutrition.FoodDescription;
+import zmacadam.metrics.model.nutrition.Food;
 import zmacadam.metrics.model.nutrition.FoodWrapper;
 import zmacadam.metrics.model.nutrition.Meal;
 import zmacadam.metrics.model.user.User;
@@ -20,9 +20,7 @@ import zmacadam.metrics.service.DayDetailsService;
 import zmacadam.metrics.util.search.SearchBuilder;
 
 import java.io.IOException;
-import java.sql.Date;
 import java.sql.Time;
-import java.util.List;
 
 @Component
 public class MealFunctionImpl extends AbstractFunctionExecutor {
@@ -66,9 +64,10 @@ public class MealFunctionImpl extends AbstractFunctionExecutor {
                 if (foodAndDescription == null) {
                     return "No foods found for entry: " + line;
                 }
+                Food food = (Food) foodAndDescription[0];
                 FoodDescription foodDescription = (FoodDescription) foodAndDescription[1];
-                foodDescription.addFood((Food) foodAndDescription[0]);
-                meal.addFoodDescription(foodDescription);
+                foodDescription.addFood(food);
+                meal.addFood(food);
             } catch (InterruptedException | IOException e) {
                 e.printStackTrace();
             }
@@ -94,8 +93,8 @@ public class MealFunctionImpl extends AbstractFunctionExecutor {
         JsonArray foodsArray = jsonObject.getAsJsonArray("foods");
         JsonObject foodsObject = (JsonObject) foodsArray.get(0);
         String foodName = foodsObject.get("food_name").toString();
-        Food food = foodRepository.findByFoodName(foodName.replace("\"", ""));
-        if (food == null) {
+        FoodDescription foodDescription = foodRepository.findByFoodName(foodName.replace("\"", ""));
+        if (foodDescription == null) {
             logger.info("food was null");
             FoodWrapper foodWrapper = (FoodWrapper) searchBuilder.jsonToFood(result, 1);
             foodWrapper.createFood(line);
@@ -103,12 +102,12 @@ public class MealFunctionImpl extends AbstractFunctionExecutor {
             foodAndDescription[1] = foodWrapper.getFoodDescription();
             return foodAndDescription;
         }
-        foodAndDescription[0] = food;
-        FoodDescription foodDescription = new FoodDescription();
-        foodDescription.setSearchQuery(line);
-        foodDescription.setServingQty(foodsObject.get("serving_qty").toString());
-        foodDescription.setServingUnit("ounce");
         foodAndDescription[1] = foodDescription;
+        Food food = new Food();
+        food.setSearchQuery(line);
+        food.setServingQty(foodsObject.get("serving_qty").toString());
+        food.setServingUnit("ounce");
+        foodAndDescription[0] = food;
         return foodAndDescription;
     }
 

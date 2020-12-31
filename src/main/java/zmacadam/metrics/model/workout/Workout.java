@@ -6,8 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import zmacadam.metrics.model.Day;
-import zmacadam.metrics.model.nutrition.Food;
-import zmacadam.metrics.model.nutrition.FoodDescription;
 
 import javax.persistence.*;
 import java.sql.Time;
@@ -37,15 +35,15 @@ public class Workout {
     private String notes;
 
     @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL)
-    private List<ExerciseDescription> exerciseDescriptions = new ArrayList<>();
+    private List<Exercise> exercises = new ArrayList<>();
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "day_id")
     private Day day;
 
-    public void addExerciseDescription(ExerciseDescription exerciseDescription) {
-        this.exerciseDescriptions.add(exerciseDescription);
-        exerciseDescription.setWorkout(this);
+    public void addExercise(Exercise exercise) {
+        this.exercises.add(exercise);
+        exercise.setWorkout(this);
     }
 
 }

@@ -12,20 +12,20 @@ public class InstantFoodWrapper {
     private Object[] common;
     private Object[] branded;
     private Object[] foods;
-    private Food[] food;
+    private FoodDescription[] food;
 
     public void createFoods() {
         List list = new ArrayList(Arrays.asList(common));
         list.addAll(Arrays.asList(branded));
         foods = list.toArray();
-        food = new Food[foods.length];
+        food = new FoodDescription[foods.length];
         for (int i = 0; i < foods.length; i++) {
             JsonObject obj = new Gson().toJsonTree(foods[i]).getAsJsonObject();
-            food[i] = new Gson().fromJson(obj, Food.class);
+            food[i] = new Gson().fromJson(obj, FoodDescription.class);
         }
     }
 
-    public Food[] getFoods() {
+    public FoodDescription[] getFoods() {
         return food;
     }
 

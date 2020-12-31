@@ -30,8 +30,6 @@ public class SleepFunctionImpl extends AbstractFunctionExecutor {
         logger.info("Sleep execute");
         logger.info(user.getPhoneNumber());
         List<Day> result = findDayByUser(user);
-        logger.info(result.toString());
-        logger.info(String.valueOf(result.size()));
         Day day = result.get(0);
         day.setSleepTime(new Time(System.currentTimeMillis()));
         saveDay(day);

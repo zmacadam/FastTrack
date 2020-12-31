@@ -33,6 +33,7 @@ public class AwakeFunctionImpl extends AbstractFunctionExecutor {
         day.setDate(new Date(System.currentTimeMillis()));
         day.setPhoneNumber(user.getPhoneNumber());
         day.setWakeTime(new Time(System.currentTimeMillis()));
+        user.addDay(day);
         saveDay(day);
         return "Awake successfully executed";
     }

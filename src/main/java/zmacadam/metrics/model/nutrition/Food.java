@@ -1,5 +1,6 @@
 package zmacadam.metrics.model.nutrition;
 
+
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,61 +8,48 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-
+import java.lang.reflect.Field;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "food_item")
+@Table(name = "food")
 public class Food {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "food_id")
     private int id;
-    @SerializedName(value = "food_name")
-    @Column(name = "food_name")
-    private String foodName;
-    @SerializedName(value = "brand_name")
-    @Column(name = "brand_name")
-    private String brandName;
-    @SerializedName(value = "nf_calories")
-    @Column(name = "calories")
-    private String Calories;
-    @SerializedName(value = "nf_total_fat")
-    @Column(name = "total_fat")
-    private String TotalFat;
-    @SerializedName(value = "nf_saturated_fat")
-    @Column(name = "saturated_fat")
-    private String SaturatedFat;
-    @SerializedName(value = "nf_cholesterol")
-    @Column(name = "cholesterol")
-    private String Cholesterol;
-    @SerializedName(value = "nf_sodium")
-    @Column(name = "sodium")
-    private String Sodium;
-    @SerializedName(value = "nf_total_carbohydrate")
-    @Column(name = "total_carbohydrate")
-    private String totalCarbohydrate;
-    @SerializedName(value = "nf_dietary_fiber")
-    @Column(name = "dietary_fiber")
-    private String dietaryFiber;
-    @SerializedName(value = "nf_sugars")
-    @Column(name = "sugars")
-    private String sugars;
-    @SerializedName(value = "nf_protein")
-    @Column(name = "protein")
-    private String protein;
+    @SerializedName(value = "serving_qty")
+    @Column(name = "serving_qty")
+    private String servingQty;
+    @SerializedName(value = "serving_unit")
+    @Column(name = "serving_unit")
+    private String servingUnit;
+    @SerializedName(value = "search_query")
+    @Column(name = "search_query")
+    private String searchQuery;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "description_id", nullable = false)
+    @JoinColumn(name ="meal_id", nullable = false)
+    private Meal meal;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="description_id")
     private FoodDescription foodDescription;
 
-    @Override public String toString() {
-        return Calories + " , " + TotalFat + " , " + SaturatedFat + " , "
-                + Cholesterol+ " , " + Sodium + " , " + totalCarbohydrate + " , " + dietaryFiber+ " , " + sugars + " , " + protein;
+    @Transient
+    public double multValue(String nutrient) throws NoSuchFieldException, IllegalAccessException {
+        Field field = foodDescription.getClass().getDeclaredField(nutrient);
+        field.setAccessible(true);
+        String value = (String) field.get(foodDescription);
+        field.setAccessible(false);
+        return Math.round(Double.parseDouble(servingQty) * Double.parseDouble(value));
+    }
+
+    @Override
+    public String toString() {
+        return servingQty + " , " + servingUnit;
     }
 }

@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import zmacadam.metrics.model.Day;
 import zmacadam.metrics.model.user.User;
-import zmacadam.metrics.model.workout.Exercise;
 import zmacadam.metrics.model.workout.ExerciseDescription;
+import zmacadam.metrics.model.workout.Exercise;
 import zmacadam.metrics.model.workout.Workout;
 import zmacadam.metrics.repository.ExerciseRepository;
 import zmacadam.metrics.service.DayDetailsService;
@@ -62,17 +62,19 @@ public class ExerciseFunctionImpl extends AbstractFunctionExecutor {
             String[] exerciseValues = line.split(" ");
             int valuesLength = exerciseValues.length;
             String exerciseName = String.join(" ", ArrayUtils.removeAll(exerciseValues, valuesLength -1, valuesLength -2));
-            Exercise exercise = exerciseRepository.findByExerciseName(exerciseName);
-            if (exercise == null) {
-                exercise = new Exercise();
-                exercise.setExerciseName(exerciseName);
+            ExerciseDescription exerciseDescription = exerciseRepository.findByExerciseName(exerciseName);
+            if (exerciseDescription == null) {
+                exerciseDescription = new ExerciseDescription();
+                exerciseDescription.setExerciseName(exerciseName);
             }
-            ExerciseDescription exerciseDescription = new ExerciseDescription();
-            exerciseDescription.setSets(Integer.parseInt(exerciseValues[valuesLength - 2]));
-            exerciseDescription.setReps(Integer.parseInt(exerciseValues[valuesLength - 1]));
-            exerciseDescription.setExerciseNumber(Integer.parseInt(identifier));
+            logger.info(exerciseDescription.getExerciseName());
+            Exercise exercise = new Exercise();
+            exercise.setSets(Integer.parseInt(exerciseValues[valuesLength - 2]));
+            exercise.setReps(Integer.parseInt(exerciseValues[valuesLength - 1]));
+            exercise.setExerciseNumber(Integer.parseInt(identifier));
+            logger.info(exercise.toString());
             exerciseDescription.addExercise(exercise);
-            workout.addExerciseDescription(exerciseDescription);
+            workout.addExercise(exercise);
             return;
         }
     }

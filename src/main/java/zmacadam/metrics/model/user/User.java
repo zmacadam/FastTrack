@@ -5,9 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
+import zmacadam.metrics.model.Day;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 
@@ -24,7 +27,7 @@ public class User {
     @Column(name = "user_id")
     private int id;
     @Column(name = "phone_number")
-    @Length(min = 10, max = 10)
+    @Length(min = 12, max = 12)
     @NotEmpty(message = "Please provide a phone number")
     private String phoneNumber;
     @Column(name = "user_name")
@@ -57,4 +60,14 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Day> days = new ArrayList<>();
+
+    public void addDay(Day day) {
+        this.days.add(day);
+        day.setUser(this);
+    }
+
+
 }

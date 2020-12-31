@@ -6,11 +6,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import zmacadam.metrics.model.Day;
-import zmacadam.metrics.model.nutrition.Food;
-import zmacadam.metrics.model.nutrition.FoodDescription;
 
 import javax.persistence.*;
+import java.lang.reflect.Field;
 import java.sql.Time;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,14 +35,33 @@ public class Meal {
     private Time time;
 
     @OneToMany(mappedBy = "meal", cascade = CascadeType.ALL)
-    private List<FoodDescription> foodDescriptions = new ArrayList<>();
+    private List<Food> foods = new ArrayList<>();
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "day_id")
     private Day day;
 
-    public void addFoodDescription(FoodDescription foodDescription) {
-        this.foodDescriptions.add(foodDescription);
-        foodDescription.setMeal(this);
+    public void addFood(Food food) {
+        this.foods.add(food);
+        food.setMeal(this);
+    }
+
+    public String getTime() {
+        String pattern = "hh:mm a";
+        DateFormat df = new SimpleDateFormat(pattern);
+        return df.format(time);
+    }
+
+    public double getTotal(String nutrient) throws NoSuchFieldException, IllegalAccessException {
+        double total = 0;
+        for (Food food : foods) {
+            FoodDescription foodDescription = food.getFoodDescription();
+            Field field = foodDescription.getClass().getDeclaredField(nutrient);
+            field.setAccessible(true);
+            String value = (String) field.get(foodDescription);
+            field.setAccessible(false);
+            total += Math.round(Double.parseDouble(food.getServingQty()) * Double.parseDouble(value));
+        }
+        return total;
     }
 }

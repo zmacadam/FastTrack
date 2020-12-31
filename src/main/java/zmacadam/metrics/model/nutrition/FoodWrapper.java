@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import zmacadam.metrics.service.SMSService;
 
 import java.util.Iterator;
 import java.util.Set;
@@ -17,11 +16,11 @@ public class FoodWrapper {
 
     private static Logger logger = LoggerFactory.getLogger(FoodWrapper.class);
 
-    public Food getFood() {
-        return food;
+    public FoodDescription getFoodDescription() {
+        return foodDescription;
     }
 
-    public FoodDescription getFoodDescription() { return foodDescription; }
+    public Food getFood() { return food; }
 
 
     public void createFood(String searchQuery) {
@@ -30,9 +29,9 @@ public class FoodWrapper {
         JsonObject descObj = createFoodDescription(foodObj);
         descObj.addProperty("search_query", searchQuery);
         logger.info(descObj.toString());
-        food = new Gson().fromJson(foodObj, Food.class);
-        foodDescription = new Gson().fromJson(descObj, FoodDescription.class);
-        logger.info(foodDescription.getSearchQuery());
+        foodDescription = new Gson().fromJson(foodObj, FoodDescription.class);
+        food = new Gson().fromJson(descObj, Food.class);
+        logger.info(food.getSearchQuery());
     }
 
     public void divideByQty(JsonObject obj) {

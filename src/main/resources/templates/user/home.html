@@ -9,30 +9,143 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script th:href="@{/js/home.js}"></script>
 </head>
 
 <body>
 <div class="container">
 
-    <form th:action="@{/logout}" method="get">
-        <button class="btn btn-md btn-danger btn-block" name="registration"
-                type="Submit">Logout
-        </button>
-    </form>
+<!--    <form th:action="@{/logout}" method="get">-->
+<!--        <button class="btn btn-md btn-danger btn-block" name="registration"-->
+<!--                type="Submit">Logout-->
+<!--        </button>-->
+<!--    </form>-->
 
     <div class="panel-group" style="margin-top:40px">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <span th:utext="${userName}"></span>
+                <span th:utext="${session.userName}"></span>
             </div>
-            <div class="panel-body">
-                <img th:src="@{/images/beer.jpg}" class="img-responsive center-block" width="400" height="400"
-                     alt="Beer"/>
+
+            <div class="center">
+                <div class="center-border">
+                    <a onclick="prevDate()" class="previous round" style="text-decoration: none">&#8249;</a>
+                    <input type="date" id="datePicker" onchange="callChangeDate()">
+                    <a onclick="nextDate()" class="next round" style="text-decoration: none">&#8250;</a>
+                </div>
             </div>
-            <p class="admin-message-text text-center" th:utext="${adminMessage}"></p>
+            <div class="center-table" th:style="${session.workouts != null ? 'display:block' : 'display:none'}">
+                <span th:if="${session.workouts != null && session.workouts.size() > 0}">Workout</span>
+                <table style="width: 100%">
+                    <thead>
+                    <tr>
+                        <th class="workout-col">Exercise</th>
+                        <th class="workout-col">Sets</th>
+                        <th class="workout-col">Reps</th>
+                    </tr>
+                    </thead>
+                    <span th:each="workout: ${session.workouts}">
+                        <td>
+                            <tr th:each="exercise: ${workout.getExercises()}">
+                                <td><p th:text="${exercise.getExerciseDescription().getExerciseName()}"></p></td>
+                                <td><p th:text="${exercise.getSets()}"></p></td>
+                                <td><p th:text="${exercise.getReps()}"></p></td>
+                            </tr>
+                        </td>
+                    </span>
+                </table>
+            </div>
+            <div class="center-table" th:style="${session.meals != null ? 'display:block' : 'display:none'}">
+                <span th:if="${session.meals != null && session.meals.size() > 0}">Meals</span>
+                <table style="width: 100%">
+                    <thead>
+                    <tr>
+                        <th class="food-col">Food</th>
+                        <th class="food-col">Calories (kcal)</th>
+                        <th class="food-col">Total Fat (g)</th>
+                        <th class="food-col">Protein (g)</th>
+                        <th class="food-col">Total Carbohydrates (g)</th>
+                    </tr>
+                    </thead>
+                    <span th:each="meal: ${session.meals}">
+                        <tbody>
+                                <tr>
+                                    <td colspan="5">
+                                        <button data-toggle="collapse" class="collapsible" th:attr="data-target= '#' + ${meal.getMealNumber()}" th:text="${'Meal ' + meal.getMealNumber()}"></button>
+                                    </td>
+                                </tr>
+                            <tbody th:id="${meal.getMealNumber()}" class="collapse">
+                                <tr th:each="food: ${meal.getFoods()}">
+                                    <td><p th:text="${food.getSearchQuery()}"></p></td>
+                                    <td><p th:text="${food.multValue('calories')}"></p></td>
+                                    <td><p th:text="${food.multValue('totalFat')}"></p></td>
+                                    <td><p th:text="${food.multValue('protein')}"></p></td>
+                                    <td><p th:text="${food.multValue('totalCarbohydrate')}"></p></td>
+                                </tr>
+                                <tr>
+                                    <td><p>Total</p></td>
+                                    <td><p th:text="${meal.getTotal('calories')}"></p></td>
+                                    <td><p th:text="${meal.getTotal('totalFat')}"></p></td>
+                                    <td><p th:text="${meal.getTotal('protein')}"></p></td>
+                                    <td><p th:text="${meal.getTotal('totalCarbohydrate')}"></p></td>
+                                </tr>
+                            </tbody>
+                        </tbody>
+                    </span>
+                </table>
+            </div>
+            <div th:style="${session.activities != null ? 'display:block' : 'display:none'}">
+                <span th:if="${session.activities != null && session.activities.size() > 0}">Activities</span>
+            </div>
+            <script th:inline="javascript">
+                window.onload = function() {
+                    var date = [[${session.date}]]
+                    if (date != null) {
+                        document.getElementById('datePicker').value = date;
+                    } else {
+                        document.getElementById('datePicker').valueAsDate = new Date();
+                    }
+                    console.log(date);
+                }
+
+            </script>
+            </div>
         </div>
     </div>
 
 </div>
 </body>
+<script>
+    function nextDate() {
+        var date = new Date(document.getElementById('datePicker').value);
+        var tomorrow = new Date(date.valueOf() + 1000*3600*24);
+        document.getElementById('datePicker').value = tomorrow.toISOString().slice(0,10);
+        callChangeDate()
+    }
+
+    function prevDate() {
+        var date = new Date(document.getElementById('datePicker').value);
+        var yesterday = new Date(date.valueOf() - 1000*3600*24);
+        document.getElementById('datePicker').value = yesterday.toISOString().slice(0,10);
+        callChangeDate()
+    }
+
+    function changeDate( callback ) {
+        var date = document.getElementById('datePicker').value;
+        const http = new XMLHttpRequest();
+        const url = "updateDate"
+        http.open("POST", url);
+        http.send(date);
+        callback(date)
+    }
+
+    function callback(date) {
+        window.location.href = "http://localhost:8080/user/home?date=" + date;
+    }
+
+    function callChangeDate() {
+        changeDate(callback);
+    }
+
+</script>
 </html>
