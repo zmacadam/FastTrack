@@ -33,4 +33,9 @@ public class ExerciseDescription {
         exercise.setExerciseDescription(this);
     }
 
+    @Override
+    public String toString() {
+        return exerciseName;
+    }
+
 }

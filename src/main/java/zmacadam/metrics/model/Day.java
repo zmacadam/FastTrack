@@ -13,6 +13,7 @@ import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Data
@@ -65,6 +66,17 @@ public class Day {
     public void addActivity(Activity activity) {
         this.activities.add(activity);
         activity.setDay(this);
+    }
+
+    public ArrayList dayTotals() throws NoSuchFieldException, IllegalAccessException {
+        ArrayList dayTotals = new ArrayList<>(Arrays.asList(0.0,0.0,0.0,0.0));
+        for (Meal meal : meals) {
+            dayTotals.set(0, (double) dayTotals.get(0) + meal.getTotal("calories"));
+            dayTotals.set(1, (double) dayTotals.get(1) + meal.getTotal("totalFat"));
+            dayTotals.set(2, (double) dayTotals.get(2) + meal.getTotal("protein"));
+            dayTotals.set(3, (double) dayTotals.get(3) + meal.getTotal("totalCarbohydrate"));
+        }
+        return dayTotals;
     }
 
 }

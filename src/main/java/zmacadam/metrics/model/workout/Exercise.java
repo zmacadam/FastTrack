@@ -1,12 +1,13 @@
 package zmacadam.metrics.model.workout;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Builder
@@ -25,7 +26,10 @@ public class Exercise {
     private int sets;
 
     @Column(name = "reps")
-    private int reps;
+    private String reps;
+
+    @Column(name = "weight")
+    private String weight;
 
     @Column(name = "exercise_number")
     private int exerciseNumber;
@@ -38,9 +42,16 @@ public class Exercise {
     @JoinColumn(name ="workout_id", nullable = false)
     private Workout workout;
 
-    @Override
-    public String toString() {
-        return sets + " " + reps;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<SetDescription> setDescriptions = new ArrayList<>();
+
+    public void addSetDescription(SetDescription setDescription) {
+        this.setDescriptions.add(setDescription);
+        setDescription.setExercise(this);
     }
 
+    @Override
+    public String toString() {
+        return exerciseNumber + "";
+    }
 }

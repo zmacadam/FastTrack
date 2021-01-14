@@ -27,6 +27,12 @@
                 <span th:utext="${session.userName}"></span>
             </div>
 
+            <button class="tablink" id="home-tab" onclick="openPage('home', this, '#337ab7')">Home</button>
+            <button class="tablink" id="workout-tab" onclick="openPage('workout', this, '#337ab7')">Workout</button>
+            <button class="tablink" id="nutrition-tab" onclick="openPage('nutrition', this, '#337ab7')">Nutrition</button>
+            <button class="tablink" id="activities-tab" onclick="openPage('activities', this, '#337ab7')">Activities</button>
+
+
             <div class="center">
                 <div class="center-border">
                     <a onclick="prevDate()" class="previous round" style="text-decoration: none">&#8249;</a>
@@ -34,68 +40,89 @@
                     <a onclick="nextDate()" class="next round" style="text-decoration: none">&#8250;</a>
                 </div>
             </div>
-            <div class="center-table" th:style="${session.workouts != null ? 'display:block' : 'display:none'}">
-                <span th:if="${session.workouts != null && session.workouts.size() > 0}">Workout</span>
-                <table style="width: 100%">
-                    <thead>
-                    <tr>
-                        <th class="workout-col">Exercise</th>
-                        <th class="workout-col">Sets</th>
-                        <th class="workout-col">Reps</th>
-                    </tr>
-                    </thead>
-                    <span th:each="workout: ${session.workouts}">
-                        <td>
-                            <tr th:each="exercise: ${workout.getExercises()}">
-                                <td><p th:text="${exercise.getExerciseDescription().getExerciseName()}"></p></td>
-                                <td><p th:text="${exercise.getSets()}"></p></td>
-                                <td><p th:text="${exercise.getReps()}"></p></td>
-                            </tr>
-                        </td>
-                    </span>
-                </table>
+            <div id="home">
             </div>
-            <div class="center-table" th:style="${session.meals != null ? 'display:block' : 'display:none'}">
-                <span th:if="${session.meals != null && session.meals.size() > 0}">Meals</span>
-                <table style="width: 100%">
-                    <thead>
-                    <tr>
-                        <th class="food-col">Food</th>
-                        <th class="food-col">Calories (kcal)</th>
-                        <th class="food-col">Total Fat (g)</th>
-                        <th class="food-col">Protein (g)</th>
-                        <th class="food-col">Total Carbohydrates (g)</th>
-                    </tr>
-                    </thead>
-                    <span th:each="meal: ${session.meals}">
-                        <tbody>
-                                <tr>
-                                    <td colspan="5">
-                                        <button data-toggle="collapse" class="collapsible" th:attr="data-target= '#' + ${meal.getMealNumber()}" th:text="${'Meal ' + meal.getMealNumber()}"></button>
-                                    </td>
-                                </tr>
-                            <tbody th:id="${meal.getMealNumber()}" class="collapse">
-                                <tr th:each="food: ${meal.getFoods()}">
-                                    <td><p th:text="${food.getSearchQuery()}"></p></td>
-                                    <td><p th:text="${food.multValue('calories')}"></p></td>
-                                    <td><p th:text="${food.multValue('totalFat')}"></p></td>
-                                    <td><p th:text="${food.multValue('protein')}"></p></td>
-                                    <td><p th:text="${food.multValue('totalCarbohydrate')}"></p></td>
-                                </tr>
-                                <tr>
-                                    <td><p>Total</p></td>
-                                    <td><p th:text="${meal.getTotal('calories')}"></p></td>
-                                    <td><p th:text="${meal.getTotal('totalFat')}"></p></td>
-                                    <td><p th:text="${meal.getTotal('protein')}"></p></td>
-                                    <td><p th:text="${meal.getTotal('totalCarbohydrate')}"></p></td>
-                                </tr>
+            <div id ="workout" class="tabcontent">
+                <div class="center-table" th:style="${session.workouts != null ? 'display:block' : 'display:none'}">
+                    <table class="styled-table" style="width: 100%">
+                        <thead>
+                        <tr>
+                            <th class="workout-col">Set</th>
+                            <th class="workout-col">Reps</th>
+                            <th class="workout-col">Weight</th>
+                        </tr>
+                        </thead>
+                        <span th:each="workout: ${session.workouts}">
+                            <span th:each="exercise: ${workout.getExercises()}">
+                                <tbody>
+                                    <tr>
+                                        <td colspan="5" style="background-color: #eee">
+                                            <button data-toggle="collapse" class="collapsible" th:attr="data-target= '#exercise' + ${exercise.getExerciseNumber()}" th:text="${exercise.getExerciseDescription().getExerciseName()}"></button>
+                                        </td>
+                                    </tr>
+                                    <tbody th:id="'exercise'+${exercise.getExerciseNumber()}" class="collapse">
+                                        <tr th:each="set, stat: ${exercise.getSetDescriptions()}">
+                                            <td><p th:text="${set.getSetNumber() + 1}"></p></td>
+                                            <td><p th:text="${set.getReps()}"></p></td>
+                                            <td><p th:text="${set.getWeight()}"></p></td>
+                                        </tr>
+                                    </tbody>
+                                </tbody>
+                            </span>
+                        </span>
+                    </table>
+                </div>
+            </div>
+            <div id="nutrition" class="tabcontent">
+                <div class="center-table" th:style="${session.meals != null ? 'display:block' : 'display:none'}">
+                    <table class="styled-table" style="width: 100%">
+                        <thead>
+                        <tr>
+                            <th class="food-col">Food Entry</th>
+                            <th class="food-col">Calories (kcal)</th>
+                            <th class="food-col">Total Fat (g)</th>
+                            <th class="food-col">Protein (g)</th>
+                            <th class="food-col">Total Carbohydrates (g)</th>
+                        </tr>
+                        </thead>
+                        <span th:each="meal: ${session.meals}">
+                            <tbody>
+                                    <tr>
+                                        <td colspan="5" style="background-color: #eee">
+                                            <button data-toggle="collapse" class="collapsible" th:attr="data-target= '#meal' + ${meal.getMealNumber()}" th:text="${'Meal ' + meal.getMealNumber()}"></button>
+                                        </td>
+                                    </tr>
+                                <tbody th:id="'meal'+${meal.getMealNumber()}" class="collapse">
+                                    <tr th:each="food: ${meal.getFoods()}">
+                                        <td><p th:text="${food.getSearchQuery()}"></p></td>
+                                        <td><p th:text="${food.multValue('calories')}"></p></td>
+                                        <td><p th:text="${food.multValue('totalFat')}"></p></td>
+                                        <td><p th:text="${food.multValue('protein')}"></p></td>
+                                        <td><p th:text="${food.multValue('totalCarbohydrate')}"></p></td>
+                                    </tr>
+                                    <tr style="font-weight: bold">
+                                        <td><p>Meal Total</p></td>
+                                        <td><p th:text="${meal.getTotal('calories')}"></p></td>
+                                        <td><p th:text="${meal.getTotal('totalFat')}"></p></td>
+                                        <td><p th:text="${meal.getTotal('protein')}"></p></td>
+                                        <td><p th:text="${meal.getTotal('totalCarbohydrate')}"></p></td>
+                                    </tr>
+                                </tbody>
                             </tbody>
-                        </tbody>
-                    </span>
-                </table>
+                        </span>
+                        <tr style="font-weight: bold">
+                            <td><p>Day Total</p></td>
+                            <td><p th:text="${session.day.dayTotals().get(0)}"></p></td>
+                            <td><p th:text="${session.day.dayTotals().get(1)}"></p></td>
+                            <td><p th:text="${session.day.dayTotals().get(2)}"></p></td>
+                            <td><p th:text="${session.day.dayTotals().get(3)}"></p></td>
+                        </tr>
+                    </table>
+                </div>
             </div>
-            <div th:style="${session.activities != null ? 'display:block' : 'display:none'}">
-                <span th:if="${session.activities != null && session.activities.size() > 0}">Activities</span>
+            <div id="activities" class="tabcontent">
+                <div th:style="${session.activities != null ? 'display:block' : 'display:none'}">
+                </div>
             </div>
             <script th:inline="javascript">
                 window.onload = function() {
@@ -106,6 +133,11 @@
                         document.getElementById('datePicker').valueAsDate = new Date();
                     }
                     console.log(date);
+
+                    var tab = [[${session.tab}]]
+                    console.log(tab);
+                    document.getElementById(tab).style.display = "block";
+                    document.getElementById(tab + "-tab").style.backgroundColor = "#337ab7";
                 }
 
             </script>
@@ -145,6 +177,33 @@
 
     function callChangeDate() {
         changeDate(callback);
+    }
+
+    function openPage(pageName, elmnt, color) {
+        // Hide all elements with class="tabcontent" by default */
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+
+        // Remove the background color of all tablinks/buttons
+        tablinks = document.getElementsByClassName("tablink");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].style.backgroundColor = "";
+        }
+
+        // Show the specific tab content
+        document.getElementById(pageName).style.display = "block";
+
+        // Add the specific color to the button used to open the tab content
+        elmnt.style.backgroundColor = color;
+
+        const http = new XMLHttpRequest();
+        const url = "updateTab"
+        http.open("POST", url);
+        http.send(pageName);
+        console.log('here');
     }
 
 </script>

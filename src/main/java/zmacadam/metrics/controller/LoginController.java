@@ -86,6 +86,10 @@ public class LoginController {
         if (session.getAttribute("date") == null) {
             session.setAttribute("date", new Date(System.currentTimeMillis()));
         }
+        if (session.getAttribute("tab") == null) {
+            session.setAttribute("tab", "home");
+
+        }
         session.setAttribute("days", user.getDays());
         session.setAttribute("userName", "Welcome back " + user.getFirst() + " " + user.getLast());
         java.sql.Date date = (Date) session.getAttribute("date");
@@ -93,6 +97,7 @@ public class LoginController {
         List<Day> days = dayDetailsService.findByDateAndPhoneNumber(date, phoneNumber);
         if (days.size() > 0) {
             Day day = days.get(0);
+            session.setAttribute("day", day);
             session.setAttribute("meals", day.getMeals());
             logger.info(String.valueOf(day.getMeals().size()));
             session.setAttribute("workouts", day.getWorkouts());
@@ -114,6 +119,12 @@ public class LoginController {
     @RequestMapping(value="/user/updateDate", method = RequestMethod.POST)
     public String updateDate(HttpSession session, @RequestBody String body) {
         session.setAttribute("date", java.sql.Date.valueOf(body));
+        return "user/home";
+    }
+
+    @RequestMapping(value="/user/updateTab", method = RequestMethod.POST)
+    public String updateTab(HttpSession session, @RequestBody String body) {
+        session.setAttribute("tab", body);
         return "user/home";
     }
 

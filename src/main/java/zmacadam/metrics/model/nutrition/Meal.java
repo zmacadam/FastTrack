@@ -41,6 +41,7 @@ public class Meal {
     @JoinColumn(name = "day_id")
     private Day day;
 
+
     public void addFood(Food food) {
         this.foods.add(food);
         food.setMeal(this);
