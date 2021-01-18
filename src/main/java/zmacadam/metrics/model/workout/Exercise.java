@@ -25,12 +25,6 @@ public class Exercise {
     @Column(name = "sets")
     private int sets;
 
-    @Column(name = "reps")
-    private String reps;
-
-    @Column(name = "weight")
-    private String weight;
-
     @Column(name = "exercise_number")
     private int exerciseNumber;
 

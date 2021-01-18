@@ -50,60 +50,36 @@ public class ExerciseFunctionImpl extends AbstractFunctionExecutor {
             currentWorkout = createWorkout();
             day.addWorkout(currentWorkout);
         }
-        if (body.length > 1) {
-            addExerciseAndDescription(currentWorkout, body, identifier);
-            saveDay(day);
-            return "Superset added";
-        }
+//        if (body.length > 1) {
+//            addExerciseAndDescription(currentWorkout, body, identifier);
+//            saveDay(day);
+//            return "Superset added";
+//        }
         addExerciseAndDescription(currentWorkout, body, identifier);
         saveDay(day);
         return "Exercise added";
     }
 
     public void addExerciseAndDescription(Workout workout, String[] body, String identifier) {
-        for (String line : body) {
-            String[] exerciseValues = line.split(" ");
-            int valuesLength = exerciseValues.length;
-            String exerciseName = String.join(" ", ArrayUtils.removeAll(exerciseValues, valuesLength -1, valuesLength -2, valuesLength -3));
-            ExerciseDescription exerciseDescription = exerciseRepository.findByExerciseName(exerciseName);
-            if (exerciseDescription == null) {
-                exerciseDescription = new ExerciseDescription();
-                exerciseDescription.setExerciseName(exerciseName);
-            }
-            logger.info(exerciseDescription.getExerciseName());
-            Exercise exercise = new Exercise();
-            exercise.setSets(Integer.parseInt(exerciseValues[valuesLength - 3]));
-            exercise.setReps(exerciseValues[valuesLength - 2]);
-            exercise.setWeight(exerciseValues[valuesLength - 1]);
-            exercise.setExerciseNumber(Integer.parseInt(identifier));
-            List reps;
-            List weights;
-            if (exercise.getReps().contains(",")) {
-                reps = Arrays.asList(exercise.getReps().split(","));
-            } else {
-                reps = new ArrayList<>();
-                for (int i = 0; i < exercise.getSets(); i++) {
-                    reps.add(Integer.parseInt(exercise.getReps()));
-                }
-            }
-            if (exercise.getWeight().contains(",")) {
-                weights = Arrays.asList(exercise.getWeight().split(","));
-            } else {
-                weights = new ArrayList<>();
-                for (int i = 0; i < exercise.getSets(); i++) {
-                    weights.add(Integer.parseInt(exercise.getWeight()));
-                }
-            }
-            for (int i = 0; i < exercise.getSets(); i++) {
-                SetDescription setDescription = new SetDescription();
-                setDescription.setSetNumber(i);
-                setDescription.setReps((int) reps.get(i));
-                setDescription.setWeight((int) weights.get(i));
-                exercise.addSetDescription(setDescription);
-            }
-            exerciseDescription.addExercise(exercise);
-            workout.addExercise(exercise);
-            return;
+        String exerciseName = body[0];
+        ExerciseDescription exerciseDescription = exerciseRepository.findByExerciseName(exerciseName);
+        if (exerciseDescription == null) {
+            exerciseDescription = new ExerciseDescription();
+            exerciseDescription.setExerciseName(exerciseName);
         }
+        Exercise exercise = new Exercise();
+        exercise.setSets(body.length - 1);
+        exercise.setExerciseNumber(Integer.parseInt(identifier));
+        for (int i = 1; i < body.length; i++) {
+            String[] line = body[i].split(" ");
+            SetDescription setDescription = new SetDescription();
+            setDescription.setSetNumber(i-1);
+            setDescription.setReps(Integer.parseInt(line[0]));
+            setDescription.setWeight(Integer.parseInt(line[1]));
+            exercise.addSetDescription(setDescription);
+        }
+        exerciseDescription.addExercise(exercise);
+        workout.addExercise(exercise);
+        return;
     }
 }

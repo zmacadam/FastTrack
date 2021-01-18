@@ -69,12 +69,15 @@ public class Day {
     }
 
     public ArrayList dayTotals() throws NoSuchFieldException, IllegalAccessException {
-        ArrayList dayTotals = new ArrayList<>(Arrays.asList(0.0,0.0,0.0,0.0));
+        ArrayList dayTotals = new ArrayList<>(Arrays.asList(0.0,0.0,0.0,0.0,0.0,0.0,0.0));
         for (Meal meal : meals) {
             dayTotals.set(0, (double) dayTotals.get(0) + meal.getTotal("calories"));
             dayTotals.set(1, (double) dayTotals.get(1) + meal.getTotal("totalFat"));
             dayTotals.set(2, (double) dayTotals.get(2) + meal.getTotal("protein"));
             dayTotals.set(3, (double) dayTotals.get(3) + meal.getTotal("totalCarbohydrate"));
+            dayTotals.set(4, (double) dayTotals.get(4) + meal.getTotal("saturatedFat"));
+            dayTotals.set(5, (double) dayTotals.get(5) + meal.getTotal("dietaryFiber"));
+            dayTotals.set(6, (double) dayTotals.get(6) + meal.getTotal("sugars"));
         }
         return dayTotals;
     }

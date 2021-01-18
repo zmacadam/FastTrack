@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
-    lang = "en-us">
+      lang = "en-us">
 
 <head>
     <title>Admin Page</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script th:href="@{/js/home.js}"></script>
@@ -15,11 +16,11 @@
 <body>
 <div class="container">
 
-<!--    <form th:action="@{/logout}" method="get">-->
-<!--        <button class="btn btn-md btn-danger btn-block" name="registration"-->
-<!--                type="Submit">Logout-->
-<!--        </button>-->
-<!--    </form>-->
+    <!--    <form th:action="@{/logout}" method="get">-->
+    <!--        <button class="btn btn-md btn-danger btn-block" name="registration"-->
+    <!--                type="Submit">Logout-->
+    <!--        </button>-->
+    <!--    </form>-->
 
     <div class="panel-group" style="margin-top:40px">
         <div class="panel panel-primary">
@@ -30,7 +31,6 @@
             <button class="tablink" id="home-tab" onclick="openPage('home', this, '#337ab7')">Home</button>
             <button class="tablink" id="workout-tab" onclick="openPage('workout', this, '#337ab7')">Workout</button>
             <button class="tablink" id="nutrition-tab" onclick="openPage('nutrition', this, '#337ab7')">Nutrition</button>
-            <button class="tablink" id="activities-tab" onclick="openPage('activities', this, '#337ab7')">Activities</button>
 
 
             <div class="center">
@@ -57,7 +57,7 @@
                                 <tbody>
                                     <tr>
                                         <td colspan="5" style="background-color: #eee">
-                                            <button data-toggle="collapse" class="collapsible" th:attr="data-target= '#exercise' + ${exercise.getExerciseNumber()}" th:text="${exercise.getExerciseDescription().getExerciseName()}"></button>
+                                            <button data-toggle="collapse" class="collapsible" th:onclick="'javascript:toggleExerciseIcon(' + ${exercise.getExerciseNumber()} + ');'" th:attr="data-target= '#exercise' + ${exercise.getExerciseNumber()}"><th:block th:text="${exercise.getExerciseDescription().getExerciseName()} + '   '"></th:block><i th:id="'exerciseicon'+${exercise.getExerciseNumber()}" class="fa fa-plus-circle"></i></button>
                                         </td>
                                     </tr>
                                     <tbody th:id="'exercise'+${exercise.getExerciseNumber()}" class="collapse">
@@ -71,6 +71,9 @@
                             </span>
                         </span>
                     </table>
+                </div>
+                <div style="display: flex; justify-content: center">
+                    <button class="btn-primary">Download Spreadsheet</button>
                 </div>
             </div>
             <div id="nutrition" class="tabcontent">
@@ -89,7 +92,7 @@
                             <tbody>
                                     <tr>
                                         <td colspan="5" style="background-color: #eee">
-                                            <button data-toggle="collapse" class="collapsible" th:attr="data-target= '#meal' + ${meal.getMealNumber()}" th:text="${'Meal ' + meal.getMealNumber()}"></button>
+                                            <button data-toggle="collapse" class="collapsible" th:onclick="'javascript:toggleMealIcon(' + ${meal.getMealNumber()} + ');'" th:attr="data-target= '#meal' + ${meal.getMealNumber()}"><th:block th:text="${'Meal ' + meal.getMealNumber()}+ '   '"></th:block><i th:id="'mealicon'+${meal.getMealNumber()}" class="fa fa-plus-circle"></i></button>
                                         </td>
                                     </tr>
                                 <tbody th:id="'meal'+${meal.getMealNumber()}" class="collapse">
@@ -112,16 +115,78 @@
                         </span>
                         <tr style="font-weight: bold">
                             <td><p>Day Total</p></td>
-                            <td><p th:text="${session.day.dayTotals().get(0)}"></p></td>
-                            <td><p th:text="${session.day.dayTotals().get(1)}"></p></td>
-                            <td><p th:text="${session.day.dayTotals().get(2)}"></p></td>
-                            <td><p th:text="${session.day.dayTotals().get(3)}"></p></td>
+                            <td><p th:text="${session?.day?.dayTotals()?.get(0)}"></p></td>
+                            <td><p th:text="${session?.day?.dayTotals()?.get(1)}"></p></td>
+                            <td><p th:text="${session?.day?.dayTotals()?.get(2)}"></p></td>
+                            <td><p th:text="${session?.day?.dayTotals()?.get(3)}"></p></td>
                         </tr>
                     </table>
                 </div>
+                <div style="display: flex; justify-content: center; margin-bottom: 2%;">
+                    <button class="btn-primary" id="detailsBtn" style="margin-right: 2%">Advanced Details</button>
+                    <button class="btn-primary">Download Spreadsheet</button>
+                </div>
             </div>
-            <div id="activities" class="tabcontent">
-                <div th:style="${session.activities != null ? 'display:block' : 'display:none'}">
+            <div id="details" class="details">
+                <div class="details-content">
+                    <span class="close">&times;</span>
+                    <div class="center-table" th:style="${session.meals != null ? 'display:block' : 'display:none'}">
+                        <table class="styled-table" style="width: 100%">
+                            <thead>
+                            <tr>
+                                <th class="advanced-col">Food Entry</th>
+                                <th class="advanced-col">Calories (kcal)</th>
+                                <th class="advanced-col">Total Fat (g)</th>
+                                <th class="advanced-col">Saturated Fat (g)</th>
+                                <th class="advanced-col">Protein (g)</th>
+                                <th class="advanced-col">Total Carbs (g)</th>
+                                <th class="advanced-col">Dietary Fiber (g)</th>
+                                <th class="advanced-col">Sugars (g)</th>
+                            </tr>
+                            </thead>
+                            <span th:each="meal: ${session.meals}">
+                            <tbody>
+                                    <tr>
+                                        <td colspan="8" style="background-color: #eee">
+                                            <button data-toggle="collapse" class="collapsible" th:onclick="'javascript:toggleAdvancedIcon(' + ${meal.getMealNumber()} + ');'" th:attr="data-target= '#advanced' + ${meal.getMealNumber()}"><th:block th:text="${'Meal ' + meal.getMealNumber()}+ '   '"></th:block><i th:id="'advancedicon'+${meal.getMealNumber()}" class="fa fa-minus-circle"></i></button>
+                                        </td>
+                                    </tr>
+                                <tbody th:id="'advanced'+${meal.getMealNumber()}" class="collapse in">
+                                    <tr th:each="food: ${meal.getFoods()}">
+                                        <td><p th:text="${food.getSearchQuery()}"></p></td>
+                                        <td><p th:text="${food.multValue('calories')}"></p></td>
+                                        <td><p th:text="${food.multValue('totalFat')}"></p></td>
+                                        <td><p th:text="${food.multValue('saturatedFat')}"></p></td>
+                                        <td><p th:text="${food.multValue('protein')}"></p></td>
+                                        <td><p th:text="${food.multValue('totalCarbohydrate')}"></p></td>
+                                        <td><p th:text="${food.multValue('dietaryFiber')}"></p></td>
+                                        <td><p th:text="${food.multValue('sugars')}"></p></td>
+                                    </tr>
+                                    <tr style="font-weight: bold">
+                                        <td><p>Meal Total</p></td>
+                                        <td><p th:text="${meal.getTotal('calories')}"></p></td>
+                                        <td><p th:text="${meal.getTotal('totalFat')}"></p></td>
+                                        <td><p th:text="${meal.getTotal('saturatedFat')}"></p></td>
+                                        <td><p th:text="${meal.getTotal('protein')}"></p></td>
+                                        <td><p th:text="${meal.getTotal('totalCarbohydrate')}"></p></td>
+                                        <td><p th:text="${meal.getTotal('dietaryFiber')}"></p></td>
+                                        <td><p th:text="${meal.getTotal('sugars')}"></p></td>
+                                    </tr>
+                                </tbody>
+                                </tbody>
+                        </span>
+                            <tr style="font-weight: bold">
+                                <td><p>Day Total</p></td>
+                                <td><p th:text="${session?.day?.dayTotals()?.get(0)}"></p></td>
+                                <td><p th:text="${session?.day?.dayTotals()?.get(1)}"></p></td>
+                                <td><p th:text="${session?.day?.dayTotals()?.get(4)}"></p></td>
+                                <td><p th:text="${session?.day?.dayTotals()?.get(2)}"></p></td>
+                                <td><p th:text="${session?.day?.dayTotals()?.get(3)}"></p></td>
+                                <td><p th:text="${session?.day?.dayTotals()?.get(5)}"></p></td>
+                                <td><p th:text="${session?.day?.dayTotals()?.get(6)}"></p></td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
             </div>
             <script th:inline="javascript">
@@ -140,14 +205,55 @@
                     document.getElementById(tab + "-tab").style.backgroundColor = "#337ab7";
                 }
 
+                var details = document.getElementById('details');
+                var button = document.getElementById('detailsBtn');
+                var close = document.getElementsByClassName('close')[0];
+
+                button.onclick = function() {
+                    console.log('clicked');
+                    details.style.display = "block";
+                }
+
+                close.onclick = function() {
+                    details.style.display = "none";
+                }
+
+                window.onclick = function(event) {
+                    if (event.target == details) {
+                        details.style.display = "none";
+                    }
+                }
+
             </script>
-            </div>
         </div>
     </div>
+</div>
 
 </div>
 </body>
 <script>
+    function toggleAdvancedIcon(id) {
+        toggleIcon("advancedicon"+id);
+    }
+    function toggleMealIcon(id) {
+        toggleIcon("mealicon"+id);
+    }
+
+    function toggleExerciseIcon(id) {
+        toggleIcon("exerciseicon"+id);
+    }
+
+    function toggleIcon(id) {
+        console.log(id);
+        var icon = document.getElementById(id);
+        console.log(icon.className);
+        if (icon.className === "fa fa-plus-circle") {
+            icon.className = "fa fa-minus-circle";
+        } else {
+            icon.className = "fa fa-plus-circle";
+        }
+    }
+
     function nextDate() {
         var date = new Date(document.getElementById('datePicker').value);
         var tomorrow = new Date(date.valueOf() + 1000*3600*24);

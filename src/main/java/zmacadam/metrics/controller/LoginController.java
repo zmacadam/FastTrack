@@ -105,6 +105,7 @@ public class LoginController {
             session.setAttribute("wake", day.getWakeTime());
             session.setAttribute("sleep", day.getSleepTime());
         } else {
+            session.removeAttribute("day");
             session.removeAttribute("meals");
             session.removeAttribute("workouts");
             session.removeAttribute("activities");

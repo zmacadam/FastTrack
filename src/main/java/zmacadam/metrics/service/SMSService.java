@@ -10,7 +10,6 @@ import zmacadam.metrics.model.user.User;
 import zmacadam.metrics.repository.UserRepository;
 import zmacadam.metrics.util.text.FunctionContext;
 import zmacadam.metrics.util.text.RegisterFunctions;
-import zmacadam.metrics.util.text.WorkoutFunctionImpl;
 
 @Service
 public class SMSService {
@@ -30,6 +29,8 @@ public class SMSService {
     public String parseText(String from, String body) {
         String[] lines = body.split("\\r?\\n");
         String[] command = lines[0].split(" ");
+        String function = command[0].toLowerCase();
+        String identifier = command[1];
         if (lines[0].equals("new user")) {
             return functionContext.call("user", lines);
         }
@@ -39,15 +40,15 @@ public class SMSService {
         }
         String[] commandRemoved = ArrayUtils.remove(lines, 0);
         if (command.length > 1) {
-            if (command[0].equals("begin") || command[0].equals("end")) {
-                if (command[1].equals("workout")) {
-                    return functionContext.call(command[1], command[0], commandRemoved, user);
+            if (function.equals("begin") || function.equals("end")) {
+                if (identifier.equals("workout")) {
+                    return functionContext.call(identifier, function, commandRemoved, user);
                 }
-                return functionContext.call("activity", command[1], command[0], commandRemoved, user);
+                return functionContext.call("activity", identifier, function, commandRemoved, user);
             }
-            return functionContext.call(command[0], command[1], commandRemoved, user);
+            return functionContext.call(function, identifier, commandRemoved, user);
         } else {
-            return functionContext.call(command[0], commandRemoved, user);
+            return functionContext.call(function, commandRemoved, user);
         }
     }
 }
